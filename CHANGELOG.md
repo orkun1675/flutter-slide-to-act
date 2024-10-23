@@ -1,3 +1,8 @@
+## [2.0.1] - 23/10/2024
+
+- Fix `RenderBox was not laid out` bug
+- Fixes linter warnings in example app
+
 ## [2.0.1] - 13/03/2021
 
 - Migrated to NNBD

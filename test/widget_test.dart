@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_test/flutter_test.dart';
 
-import '../lib/slide_to_act.dart';
+import 'package:slide_to_act/slide_to_act.dart';
 
 void main() {
   testWidgets('defaults', (tester) async {
