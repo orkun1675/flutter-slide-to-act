@@ -381,7 +381,7 @@ class SlideActionState extends State<SlideAction>
     _cancelAnimationController.forward();
   }
 
-  Future<Size?> _obtainWidgetSize(GlobalKey key) async {
+  Future<Size?> _getWidgetSize(GlobalKey key) async {
     BuildContext? context = key.currentContext;
     if (context == null || !context.mounted) {
       return null;
@@ -391,16 +391,27 @@ class SlideActionState extends State<SlideAction>
       return null;
     }
     if (!renderObject.hasSize) {
-      // RenderBox is not yet ready.
-      await Future.delayed(const Duration(seconds: 1));
-      return _obtainWidgetSize(key);
+      return null;
     }
     return renderObject.size;
   }
 
+  Future<Size?> _obtainWidgetSize(GlobalKey key) async {
+    for (int i = 0; i < 100; i++) {
+      final size = await _getWidgetSize(key);
+      if (size != null) {
+        return size;
+      }
+      await Future.delayed(const Duration(milliseconds: 100));
+    }
+    return null;
+  }
+
   Future<void> _initializeSizes() async {
-    final containerSize = await _obtainWidgetSize(_containerKey);
-    final sliderSize = await _obtainWidgetSize(_sliderKey);
+    final results = await Future.wait(
+        [_obtainWidgetSize(_containerKey), _obtainWidgetSize(_sliderKey)]);
+    final containerSize = results[0];
+    final sliderSize = results[1];
 
     if (containerSize == null || sliderSize == null) {
       throw Exception('Could not obtain the size of the widgets');
