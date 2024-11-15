@@ -414,6 +414,7 @@ class SlideActionState extends State<SlideAction>
     final sliderSize = results[1];
 
     if (containerSize == null || sliderSize == null) {
+      if (!mounted) return;
       throw Exception('Could not obtain the size of the widgets');
     }
 
